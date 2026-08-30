@@ -8,8 +8,16 @@
 .page-header {
   padding-block: var(--space-2) var(--space-5);
 }
-.page-header__title { font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem); }
-.page-header__text { color: var(--text-secondary); margin-top: var(--space-1); }
+.page-header__title { 
+  font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem); 
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.page-header__text { 
+  color: var(--text-secondary); 
+  margin-top: var(--space-1); 
+  font-size: 0.95rem;
+}
 
 /* ---------- Shop toolbar ---------- */
 .shop-toolbar {
@@ -25,12 +33,14 @@
 
 .shop-toolbar__search {
   position: relative;
+  width: 100%;
 }
 .shop-toolbar__search svg {
   position: absolute;
   left: 14px; top: 50%;
   transform: translateY(-50%);
   color: var(--text-secondary);
+  pointer-events: none;
 }
 .shop-toolbar__search input {
   width: 100%;
@@ -38,11 +48,16 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--bg);
+  font-size: 0.95rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
 }
 .shop-toolbar__search input:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-soft);
   outline: none;
+}
+.shop-toolbar__search input::placeholder {
+  color: var(--text-secondary);
 }
 
 .shop-toolbar__row {
@@ -57,6 +72,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
 }
 
 .filter-pill {
@@ -68,6 +85,8 @@
   font-weight: 500;
   color: var(--text-secondary);
   transition: all var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .filter-pill:hover { border-color: var(--primary); color: var(--primary); }
 .filter-pill--active {
@@ -83,12 +102,21 @@
   font-size: 0.85rem;
   color: var(--text-secondary);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .shop-toolbar__sort select {
   padding: 0.55rem 0.9rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--surface);
+  font-size: 0.85rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+}
+.shop-toolbar__sort select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+  outline: none;
 }
 
 .results-count { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-4); }
@@ -144,18 +172,29 @@
 }
 .qty-selector button {
   width: 42px; height: 42px;
+  min-width: 44px;
+  min-height: 44px;
   font-size: 1.1rem;
   color: var(--text);
-  transition: background var(--transition);
+  transition: background var(--transition), color var(--transition);
+  cursor: pointer;
+  background: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .qty-selector button:hover { background: var(--primary-soft); color: var(--primary); }
+.qty-selector button:active { opacity: 0.8; }
 .qty-selector input {
   width: 52px; height: 42px;
   text-align: center;
   border: none;
   border-inline: 1px solid var(--border);
   -moz-appearance: textfield;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: inherit;
 }
+.qty-selector input:focus { outline: none; }
 .qty-selector input::-webkit-outer-spin-button,
 .qty-selector input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
@@ -239,8 +278,23 @@
   border-radius: var(--radius-sm);
   width: fit-content;
 }
-.qty-btn { width: 30px; height: 30px; font-size: 1rem; transition: background var(--transition); border-radius: var(--radius-sm); }
+.qty-btn { 
+  width: 30px; 
+  height: 30px;
+  min-width: 36px;
+  min-height: 36px;
+  font-size: 1rem; 
+  font-weight: 600;
+  transition: background var(--transition), color var(--transition); 
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--border);
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
 .qty-btn:hover { background: var(--primary-soft); color: var(--primary); }
+.qty-btn:active { opacity: 0.8; }
 .qty-value { min-width: 20px; text-align: center; font-weight: 600; font-size: 0.9rem; }
 
 .cart-item__line-total { grid-area: total; font-weight: 700; justify-self: end; font-size: 0.95rem; }

@@ -154,6 +154,22 @@ function initNavbar() {
       document.body.classList.toggle("no-scroll", !isOpen);
     });
 
+    // Close the mobile menu when clicking outside of it
+    document.addEventListener("click", (e) => {
+      const isOpen = hamburger.getAttribute("aria-expanded") === "true";
+      const clickedInsideMenu = mobileMenu.contains(e.target);
+      const clickedHamburger = hamburger.contains(e.target);
+
+      if (isOpen && !clickedInsideMenu && !clickedHamburger) {
+        // Clicked outside the menu and hamburger button
+        hamburger.setAttribute("aria-expanded", "false");
+        hamburger.classList.remove("hamburger--active");
+        mobileMenu.classList.remove("mobile-menu--open");
+        document.body.classList.remove("no-scroll");
+        setTimeout(() => { mobileMenu.hidden = true; }, 200);
+      }
+    });
+
     // Close the mobile menu whenever a link inside it is used
     mobileMenu.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => {
