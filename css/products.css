@@ -357,15 +357,36 @@
 }
 
 /* ---------- Checkout page ---------- */
-.checkout-layout {
+.checkout-page {
+  overflow-x: hidden;
+}
+
+.checkout-page .checkout-layout,
+.checkout-page .checkout-form,
+.checkout-page .order-summary,
+.checkout-page .checkout-form .field,
+.checkout-page .checkout-form .field input,
+.checkout-page .checkout-form .field select,
+.checkout-page .checkout-form .field textarea,
+.checkout-page .checkout-form .field button,
+.checkout-page .checkout-form .btn,
+.checkout-page .order-summary .summary-item,
+.checkout-page .order-summary .summary-row {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.checkout-page .checkout-layout {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-6);
   align-items: start;
   padding-bottom: var(--space-8);
+  min-width: 0;
 }
 
-.checkout-form {
+.checkout-page .checkout-form {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-4);
@@ -374,7 +395,22 @@
   border-radius: var(--radius-md);
   padding: var(--space-5);
 }
-.checkout-form h2 { font-size: 1.05rem; margin-bottom: var(--space-1); }
+.checkout-page .checkout-form h2 { font-size: 1.05rem; margin-bottom: var(--space-1); }
+.checkout-page .checkout-form .btn,
+.checkout-page .checkout-form button {
+  white-space: normal;
+  width: 100%;
+  max-width: 100%;
+}
+.checkout-page .checkout-form .field input,
+.checkout-page .checkout-form .field select,
+.checkout-page .checkout-form .field textarea {
+  min-width: 0;
+}
+.checkout-page .checkout-form,
+.checkout-page .order-summary {
+  min-width: 0;
+}
 
 /* ---------- Success page ---------- */
 .success-panel {

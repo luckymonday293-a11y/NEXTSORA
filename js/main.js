@@ -131,6 +131,74 @@ function showToast(message, type = "success") {
 
 /* ---------- Navbar: mobile menu + search toggle ---------- */
 
+function setNavbarActiveLink(link) {
+  const navLinks = Array.from(document.querySelectorAll(".navbar__link"));
+  navLinks.forEach((item) => {
+    if (item === link) {
+      item.setAttribute("aria-current", "page");
+    } else {
+      item.removeAttribute("aria-current");
+    }
+  });
+}
+
+function updateNavbarFromRouteAndHash() {
+  const navLinks = Array.from(document.querySelectorAll(".navbar__link"));
+  if (!navLinks.length) return;
+
+  const page = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+  const hash = (window.location.hash || "").replace("#", "");
+
+  let activeLink = navLinks.find((link) => {
+    const href = new URL(link.href, window.location.href);
+    return href.pathname.toLowerCase().endsWith(page) && !href.hash;
+  });
+
+  if (hash === "categories") {
+    activeLink = navLinks.find((link) => link.getAttribute("href") === "index.html#categories");
+  } else if (hash === "why-choose") {
+    activeLink = navLinks.find((link) => link.getAttribute("href") === "index.html#why-choose");
+  } else if (page === "products.html" || page === "product.html") {
+    activeLink = navLinks.find((link) => link.getAttribute("href") === "products.html");
+  } else if (page === "cart.html") {
+    activeLink = navLinks.find((link) => link.getAttribute("href") === "index.html");
+  } else if (page === "checkout.html" || page === "success.html") {
+    activeLink = navLinks.find((link) => link.getAttribute("href") === "index.html");
+  } else {
+    activeLink = navLinks.find((link) => link.getAttribute("href") === "index.html");
+  }
+
+  if (activeLink) {
+    setNavbarActiveLink(activeLink);
+  }
+}
+
+function updateNavbarFromScroll() {
+  const page = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+  if (page !== "index.html") return;
+
+  const navLinks = Array.from(document.querySelectorAll(".navbar__link"));
+  const categories = document.getElementById("categories");
+  const about = document.getElementById("why-choose");
+  if (!categories || !about || !navLinks.length) return;
+
+  const categoriesLink = navLinks.find((link) => link.getAttribute("href") === "index.html#categories");
+  const aboutLink = navLinks.find((link) => link.getAttribute("href") === "index.html#why-choose");
+  const homeLink = navLinks.find((link) => link.getAttribute("href") === "index.html");
+
+  const scrollY = window.scrollY || window.pageYOffset;
+  const categoryTop = categories.getBoundingClientRect().top + scrollY;
+  const aboutTop = about.getBoundingClientRect().top + scrollY;
+
+  if (scrollY >= categoryTop && scrollY < aboutTop) {
+    if (categoriesLink) setNavbarActiveLink(categoriesLink);
+  } else if (scrollY >= aboutTop) {
+    if (aboutLink) setNavbarActiveLink(aboutLink);
+  } else if (homeLink) {
+    setNavbarActiveLink(homeLink);
+  }
+}
+
 function initNavbar() {
   const hamburger = document.getElementById("hamburgerBtn");
   const mobileMenu = document.getElementById("mobileMenu");
@@ -197,6 +265,24 @@ function initNavbar() {
     });
   }
 
+  const navLinks = Array.from(document.querySelectorAll(".navbar__link"));
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      const href = new URL(link.href, window.location.href);
+      const hash = (href.hash || "").replace("#", "");
+
+      if (hash === "categories") {
+        setNavbarActiveLink(link);
+      } else if (hash === "why-choose") {
+        setNavbarActiveLink(link);
+      } else if (href.pathname.toLowerCase().endsWith("products.html") || href.pathname.toLowerCase().endsWith("product.html")) {
+        setNavbarActiveLink(link);
+      } else if (href.pathname.toLowerCase().endsWith("index.html") || href.pathname === "/" || href.pathname === "") {
+        setNavbarActiveLink(link);
+      }
+    });
+  });
+
   const searchForm = document.getElementById("navbarSearchForm");
   if (searchForm) {
     searchForm.addEventListener("submit", (e) => {
@@ -207,6 +293,10 @@ function initNavbar() {
       window.location.href = `products.html?search=${encodeURIComponent(query)}`;
     });
   }
+
+  updateNavbarFromRouteAndHash();
+  updateNavbarFromScroll();
+  window.addEventListener("scroll", updateNavbarFromScroll, { passive: true });
 }
 
 /* ---------- Scroll to top button ---------- */

@@ -277,17 +277,28 @@ h1, h2, h3, h4 { font-weight: 600; color: var(--text); letter-spacing: -0.01em; 
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--text-secondary);
-  transition: color var(--transition);
+  transition: color var(--transition), transform var(--transition);
   position: relative;
 }
-.navbar__link:hover, .navbar__link[aria-current="page"] { color: var(--text); }
-.navbar__link[aria-current="page"]::after {
+.navbar__link::after {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: -6px;
+  left: 0;
+  right: 0;
+  bottom: -6px;
   height: 2px;
   background: var(--primary);
   border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition), background var(--transition), opacity var(--transition);
+}
+.navbar__link:hover,
+.navbar__link[aria-current="page"] { color: var(--text); }
+.navbar__link:hover::after,
+.navbar__link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
 }
 
 .navbar__actions { display: flex; align-items: center; gap: var(--space-2); }
